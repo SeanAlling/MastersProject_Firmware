@@ -1,0 +1,15 @@
+make when it expands a makefile to make one large make file. This large makefile has no concept of 
+directory structure. To keep track of the directory structure have to implement a stack of 
+directory paths in make. This is done by in each step by looking at [TODO]
+
+
+The make framework requires that all the makefile parts be located in a central location. The next requirement is that each directory needs 
+to have a subdir.mk file. This file lets make know that this folder should be included in the build. If the folder contains a subdirectory then 
+this information is included in the subdir.mk file. If there are include files then they are also encoded into the subdir.mk file. 
+
+
+If one would like to add a new target to the system then use the target_xxx.mk template. This new *.mk file is then added as an include in 
+makefile. The all rule can then be updated or a new target rule defined that one can run. Following these steps it is possible to extend 
+the core system to support multiple new targets and builds without having to modify the core makefile system. 
+
+[TODO]: add target.xxx.mk files in a directory and have make auto include these. Is this possible? 

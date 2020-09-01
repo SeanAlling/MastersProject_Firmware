@@ -1,0 +1,83 @@
+* L0_Chip
+    - Hardware dependant.
+    - These files are provided by the MCU vendor
+
+* L1_RTOS
+    - Most RTOS need to have direct access to the low level hardware timers to work correctly
+    - Does not need to be included
+
+* L2_System
+    - Implements the interface between the L0_Chip vendor drivers and the higher levels. 
+    - This layer has two benefits
+        1) If the MCU changes (resulting in new L0_Chip source code) then only this layer needs to be reimplemented. 
+        2) If the target is a PC simulator then this layer can be used to re-target for the PC. 
+
+* L3_Utils
+    - Extra tools that the MCU can use, for example Segger RTT
+    - higher level serial protocols
+
+* L4_IO
+    - This layer implements the sensors and other external device interfaces. 
+    - Think of this layer with actually interfacing with what is at board level. 
+
+* L5_Application
+    - The main application of the system. If using an RTOS/RTS then the each of the modules would be defined here.
+
+
+Each layer ONLY calls functions that are within its layer or directly below, NEVER more than one layer below. 
+
++------------------------------+
+|                              |
+|       L5_Application         |
+|                              |
++------------------------------+
+|               |              |
+|    L3_Util    |    L4_IO     |
+|               |              |
++------------------------------+
+|               |              |
+|    L1_RTOS    |   L2_System  |
+|               |              |
++------------------------------+
+|                              |
+|           L0_Chip            |
+|                              |
++------------------------------+
+
+
+To make the software more robust to changes in hardware, RTOS/RTS, the the following architecture can be used
+
++------------------------------+
+|                              |
+|       L5_Application         |
+|                              |
++------------------------------+
+|               |              |
+|    L3_Util    |    L4_IO     |
+|               |              |
++------------------------------+
+|               |              |
+|  RTOS/RTS Abs |              |
+|    Layer      |              |
++---------------+   L2_System  |
+|               |              |
+|    L1_RTOS    |              |
+|               |              |
++------------------------------+
+|                              |
+|  Hardware Abstraction Layer  |
+|                              |
++------------------------------+
+|                              |
+|           L0_Chip            |
+|                              |
++------------------------------+
+
+Any change to the hardware the HAL will change. L2_System is now responsible for only higher label serial 
+protocol support or interfacing with with mechanisms of the hardware. For example say that we have a 
+hardware based CRC generator. The interface to the CRC will be standardized in the HAL and the actual operations
+performed with the CRC checker would be preformed in Lib_System. If in the future if the CRC generator 
+is removed from hardware then the CRC operation can be replaced with a software version placed in L2_System. 
+
+By using the RTOS/RTS abstraction layer, if in the future the scheduler  or RTOS is replaced with a new one then only this 
+interface implementation is modified. An example of this would be the CMSIS RTOS abstration layer. 

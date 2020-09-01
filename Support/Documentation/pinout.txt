@@ -1,0 +1,22 @@
+Development Kit
+
+SPI
+P1.5 CLK
+P1.6 MISI
+P1.7 MOSO
+
+
+LED
+P1.0 HB
+P2.0 Red
+P2.1 Green
+P2.2 Blue
+
+
+EPaper Display
+P6.0 EPD_READY
+P3.2 EPD_RESET
+P4.2 EPD_CS
+P6.1 EPD_DC
+P3.3 EPD_BUSSEL
+

@@ -1,0 +1,8 @@
+If SWD
+speed AUTO
+connect
+erase
+loadfile ./Build/Debug/MastersProject.srec
+r
+g
+exit
